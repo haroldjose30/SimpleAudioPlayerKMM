@@ -9,8 +9,8 @@ TODO Shared KMM Project:
 - [X] Create Repository pattern interface - 01:00 
 - [X] Create Repository pattern mocked - 01:00
 - [X] Configure DI on Shared - 01:24
-- [ ] Create Repository pattern real to Request to get manifest file
-- [ ] Create UseCase to Get Manifest
+- [X] Create Repository pattern real to Request to get manifest file - 07:18
+- [X] Create UseCase to Get Manifest - 07:18
 - [ ] Create UseCase to Favorite Music
 
 
@@ -23,7 +23,7 @@ TODO IOS Project:
 TODO Android Project:
 - [X] Create default Android Folder Structure - 00:48
 - [X] Configure DI on Android - 01:24
-- [ ] Create Main Page
+- [X] Create Main Page - 07:18
 - [ ] Create Detail Page
 
 

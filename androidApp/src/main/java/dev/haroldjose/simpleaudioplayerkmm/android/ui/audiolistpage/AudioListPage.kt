@@ -24,10 +24,11 @@ import androidx.compose.ui.unit.sp
 import dev.haroldjose.simpleaudioplayerkmm.android.R
 import dev.haroldjose.simpleaudioplayerkmm.android.component.AudioListItem
 import dev.haroldjose.simpleaudioplayerkmm.android.utils.ResourcesProvider
-import dev.haroldjose.simpleaudioplayerkmm.data.repository.IAudioRepository
+import dev.haroldjose.simpleaudioplayerkmm.data.repository.local.IAudioLocalRepository
 import dev.haroldjose.simpleaudioplayerkmm.data.response.AudioEntryDTO
 import dev.haroldjose.simpleaudioplayerkmm.domain.model.AudioEntry
 import dev.haroldjose.simpleaudioplayerkmm.domain.usecase.audio.GetAllAudioUseCase
+import dev.haroldjose.simpleaudioplayerkmm.domain.usecase.audio.SetFavoriteAudioUseCase
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
 
@@ -62,14 +63,15 @@ fun AudioListPage(
         is AudioListPageState.Success -> SuccessView(
             listState,
             pullRefreshState,
-            (viewModel.pageState as AudioListPageState.Success).data
+            (viewModel.pageState as AudioListPageState.Success).data,
+            viewModel
         )
     }
 }
 
 @Composable
 private fun EmptyView(){
-
+    //TODO: Improve UI
     Text(text = "Pull to refresh...")
 }
 
@@ -88,7 +90,7 @@ private fun LoadingView(
 
 @Composable
 private fun FailureView(message: String){
-
+    //TODO: Improve UI
     Text(text = message)
 }
 
@@ -97,8 +99,10 @@ private fun FailureView(message: String){
 private fun SuccessView(
     listState: LazyListState,
     pullRefreshState: PullRefreshState,
-    audioList: List<AudioEntry>
+    audioList: List<AudioEntry>,
+    viewModel: AudioListPageViewModel
 ) {
+    val coroutineScope = rememberCoroutineScope()
     Column(Modifier.pullRefresh(pullRefreshState)) {
 
         Row {
@@ -116,20 +120,20 @@ private fun SuccessView(
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             items(audioList) { audio ->
-                AudioRowView(audio)
+
+                AudioListItem(
+                    audio = audio,
+                    onFavoriteClicked = {
+                        coroutineScope.launch {
+                            viewModel.onFavoriteClicked(audio,it)
+                        }
+
+                    },
+                    onItemClicked = {}
+                )
             }
         }
     }
-}
-
-@Composable
-private fun AudioRowView(audio: AudioEntry){
-    
-    AudioListItem(
-        audio = audio,
-        onFavoriteClicked = {},
-        onItemClicked = {}
-    )
 }
 
 
@@ -140,9 +144,11 @@ fun AudioListPagePreview() {
 
     val resourcesProvider = ResourcesProvider(LocalContext.current)
     val repository = mockRepo()
-    val useCase = GetAllAudioUseCase(repository = repository)
+    val getAllAudioUseCase = GetAllAudioUseCase(repository = repository)
+    val setFavoriteAudioUseCase = SetFavoriteAudioUseCase(repository = repository)
     val viewModel = AudioListPageViewModel(
-        useCase,
+        getAllAudioUseCase,
+        setFavoriteAudioUseCase,
         resourcesProvider
     )
 
@@ -151,7 +157,8 @@ fun AudioListPagePreview() {
             title = "Oceansound",
             audio = "https://nomad5.com/data/skoove/Oceansound.mp3",
             cover = "https://nomad5.com/data/skoove/Oceansound.png",
-            totalDurationMs = 14448
+            totalDurationMs = 14448,
+            isFavorite = true
         ),
         AudioEntry(
             title = "Nightlife",
@@ -172,8 +179,12 @@ fun AudioListPagePreview() {
     return AudioListPage(viewModel = viewModel)
 }
 
-private class mockRepo: IAudioRepository {
+private class mockRepo: IAudioLocalRepository {
     override suspend fun getAll(): List<AudioEntryDTO> {
        return arrayListOf()
+    }
+
+    override suspend fun setFavorite(audio: AudioEntryDTO) {
+
     }
 }

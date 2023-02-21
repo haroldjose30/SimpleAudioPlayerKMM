@@ -1,5 +1,6 @@
-package dev.haroldjose.simpleaudioplayerkmm.data.repository
+package dev.haroldjose.simpleaudioplayerkmm.data.repository.remote
 
+import dev.haroldjose.simpleaudioplayerkmm.data.response.ApiResponse
 import dev.haroldjose.simpleaudioplayerkmm.data.response.AudioEntryDTO
 import io.ktor.client.*
 import io.ktor.client.call.*
@@ -10,7 +11,7 @@ import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 
-class AudioRepository: IAudioRepository {
+class AudioRemoteRepository: IAudioRemoteRepository {
 
     private val apiUrl = "https://nomad5.com/data/skoove/manifest.json"
 
@@ -33,9 +34,11 @@ class AudioRepository: IAudioRepository {
         val httpResponse = client.get {  }
 
         if (httpResponse.status.value in 200..299) {
-            return  httpResponse.body()
+            val apiResponse = httpResponse.body<ApiResponse<List<AudioEntryDTO>>>()
+            return apiResponse.data ?: arrayListOf()
         }
 
+        //TODO: Handle error
         return arrayListOf()
     }
 }

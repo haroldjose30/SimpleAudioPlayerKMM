@@ -1,14 +1,15 @@
 package dev.haroldjose.simpleaudioplayerkmm.data.di
 
-import dev.haroldjose.simpleaudioplayerkmm.data.repository.AudioInMemoryRepository
-import dev.haroldjose.simpleaudioplayerkmm.data.repository.IAudioRepository
-import dev.haroldjose.simpleaudioplayerkmm.data.repository.AudioRepository
+import dev.haroldjose.simpleaudioplayerkmm.data.repository.local.AudioInMemoryLocalRepository
+import dev.haroldjose.simpleaudioplayerkmm.data.repository.local.IAudioLocalRepository
+import dev.haroldjose.simpleaudioplayerkmm.data.repository.remote.AudioRemoteRepository
+import dev.haroldjose.simpleaudioplayerkmm.data.repository.remote.IAudioRemoteRepository
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
 internal val dataModules = module {
 
-    singleOf(::AudioInMemoryRepository) bind IAudioRepository::class
-    //singleOf(::AudioRepository) bind IAudioRepository::class
+    singleOf(::AudioInMemoryLocalRepository) bind IAudioLocalRepository::class
+    singleOf(::AudioRemoteRepository) bind IAudioRemoteRepository::class
 }

@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -31,6 +33,9 @@ fun AudioListItem(
     onItemClicked: () -> Unit
 ) {
 
+    val isFavoriteState = remember {
+        mutableStateOf(isFavorite)
+    }
 
     Column(modifier = Modifier
         .padding(horizontal = 16.dp, vertical = 8.dp)
@@ -78,8 +83,11 @@ fun AudioListItem(
 
             // Favorite Heart
             FavoriteElement(modifier = Modifier,
-                favoriteState = isFavorite,
-                onClick = { onFavoriteClicked(it) })
+                favoriteState = isFavoriteState.value,
+                onClick = {
+                    isFavoriteState.value = it
+                    onFavoriteClicked(it)
+                })
         }
     }
 }

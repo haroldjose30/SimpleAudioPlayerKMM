@@ -1,8 +1,7 @@
-package dev.haroldjose.simpleaudioplayerkmm.data.repository
+package dev.haroldjose.simpleaudioplayerkmm.data.repository.remote
 
 import dev.haroldjose.simpleaudioplayerkmm.data.response.AudioEntryDTO
 
-public interface IAudioRepository {
+internal interface IAudioRemoteRepository {
     suspend fun getAll(): List<AudioEntryDTO>
-
 }
