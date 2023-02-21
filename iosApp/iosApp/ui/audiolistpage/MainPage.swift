@@ -8,9 +8,9 @@
 
 import SwiftUI
 
-struct MainPage: View {
+struct AudioListPage: View {
     
-    @StateObject var viewModel: MainPageViewModel
+    @StateObject var viewModel: AudioListPageViewModel
     
     var body: some View {
         VStack {
@@ -30,16 +30,16 @@ struct MainPage: View {
 }
 
 
-extension MainPage {
+extension AudioListPage {
     private enum Localizable {
         static let pageTitle = "Skoovin´"
     }
     
 }
 
-struct MainPage_Previews: PreviewProvider {
+struct AudioListPage_Previews: PreviewProvider {
     static var previews: some View {
         
-        MainPage(viewModel: MainPageViewModel())
+        AudioListPage(viewModel: AudioListPageViewModel())
     }
 }

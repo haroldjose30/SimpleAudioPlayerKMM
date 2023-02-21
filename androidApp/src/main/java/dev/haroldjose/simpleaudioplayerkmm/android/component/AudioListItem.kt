@@ -30,7 +30,8 @@ fun AudioListItem(
     rating: Int = 3,
     isFavorite: Boolean = false,
     onFavoriteClicked: (newState: Boolean) -> Unit,
-    onItemClicked: () -> Unit
+    onItemClicked: () -> Unit,
+    onStarClicked: (index: Int) -> Unit
 ) {
 
     val isFavoriteState = remember {
@@ -61,7 +62,7 @@ fun AudioListItem(
                     .fillMaxWidth())
 
             // Rating element
-            RatingStars(modifier = Modifier.padding(8.dp), rating, onStarClicked = {})
+            RatingStars(modifier = Modifier.padding(8.dp), rating, onStarClicked = onStarClicked)
         }
 
         // Title and favorite section
@@ -99,6 +100,7 @@ fun AudioListItemPreview() {
     Column() {
         AudioListItem(
             audio = AudioEntry(
+                uuid = "uuid1",
                 title = "Oceansound",
                 audio = "https://nomad5.com/data/skoove/Oceansound.mp3",
                 cover = "https://nomad5.com/data/skoove/Oceansound.png",
@@ -107,7 +109,8 @@ fun AudioListItemPreview() {
             rating = 1,
             isFavorite = true,
             onFavoriteClicked = {},
-            onItemClicked = {}
+            onItemClicked = {},
+            onStarClicked = {}
         )
     }
 }

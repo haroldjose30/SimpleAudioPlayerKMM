@@ -6,10 +6,12 @@ import dev.haroldjose.simpleaudioplayerkmm.domain.model.AudioEntry
 
 internal fun AudioEntry.toDTO(): AudioEntryDTO {
     return AudioEntryDTO(
+        uuid = this.uuid,
         title = this.title,
         audio = this.audio,
         cover = this.cover,
         totalDurationMs = this.totalDurationMs,
-        isFavorite = this.isFavorite
+        isFavorite = this.isFavorite,
+        rating = this.rating
     )
 }

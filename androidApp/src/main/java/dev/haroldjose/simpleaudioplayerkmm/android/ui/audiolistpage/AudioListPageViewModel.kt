@@ -9,12 +9,16 @@ import dev.haroldjose.simpleaudioplayerkmm.android.utils.ResourcesProvider
 import dev.haroldjose.simpleaudioplayerkmm.domain.model.AudioEntry
 import dev.haroldjose.simpleaudioplayerkmm.domain.usecase.audio.GetAllAudioUseCase
 import dev.haroldjose.simpleaudioplayerkmm.domain.usecase.audio.SetFavoriteAudioUseCase
+import dev.haroldjose.simpleaudioplayerkmm.domain.usecase.audio.UpdateAudioUseCase
 
 class AudioListPageViewModel(
     private val getAllAudioUseCase: GetAllAudioUseCase,
     private val setFavoriteAudioUseCase: SetFavoriteAudioUseCase,
-    private val resourcesProvider: ResourcesProvider
+    private val resourcesProvider: ResourcesProvider,
+    //FIXME: DI with Error
+    //private val updateAudioUseCase: UpdateAudioUseCase,
 ): ViewModel() {
+
 
     var pageState: AudioListPageState by mutableStateOf(AudioListPageState.Empty())
 
@@ -53,8 +57,23 @@ class AudioListPageViewModel(
             val defaultMessage = resourcesProvider.getString(R.string.something_went_wrong)
             pageState = AudioListPageState.Failure("$defaultMessage - ${e.message}")
         }
+    }
 
+    suspend fun onStarClicked(
+        audio: AudioEntry,
+        index: Int
+    ) {
 
+        try{
+            var audioMuttable = audio.copy()
+            audioMuttable.rating = index
+            //updateAudioUseCase.execute(audioMuttable)
+        }
+        catch(e:Exception){
+            e.printStackTrace()
+            val defaultMessage = resourcesProvider.getString(R.string.something_went_wrong)
+            pageState = AudioListPageState.Failure("$defaultMessage - ${e.message}")
+        }
     }
 }
 

@@ -6,11 +6,14 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import java.util.*
 
 /**
  * Media player controller wrapped as a ViewModel exposing its current state
  */
 abstract class MediaPlayerController : ViewModel(), IMediaPlayerController {
+
+
 
     // object of media player
     private val mediaPlayer = MediaPlayer()
@@ -30,11 +33,24 @@ abstract class MediaPlayerController : ViewModel(), IMediaPlayerController {
      */
     override fun audioSelected(url: String) {
         when (mediaPlayerState.value) {
-            MediaPlayerState.Started -> pauseMediaPlayer()
+            MediaPlayerState.Started -> {
+                if (mediaPlayer.isPlaying)
+                    pauseMediaPlayer()
+                else
+                    startMediaPlayer()
+            }
             MediaPlayerState.Paused, MediaPlayerState.Initialized, MediaPlayerState.Finished -> startMediaPlayer()
             else -> {
                 initializeMediaPlayer(url)
             }
+        }
+    }
+
+
+    val timer = Timer()
+    val monitor = object : TimerTask() {
+        override fun run() {
+           mediaPlayer.duration
         }
     }
 
@@ -47,6 +63,9 @@ abstract class MediaPlayerController : ViewModel(), IMediaPlayerController {
             mediaPlayer.setDataSource(url)
             mediaPlayer.prepare()
             _mediaPlayerState.update { MediaPlayerState.Initialized }
+            timer.schedule(monitor, 1000, 1000)
+
+            startMediaPlayer()
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -70,8 +89,8 @@ abstract class MediaPlayerController : ViewModel(), IMediaPlayerController {
     override fun pauseMediaPlayer() {
         if (mediaPlayer.isPlaying) {
             mediaPlayer.pause()
-            _mediaPlayerState.update { MediaPlayerState.Paused }
         }
+        _mediaPlayerState.update { MediaPlayerState.Paused }
     }
 
 

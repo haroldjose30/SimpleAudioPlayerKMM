@@ -11,7 +11,7 @@ struct iOSApp: App {
 	var body: some Scene {
 		WindowGroup {
             //TODO: Add viewModel on DI
-            MainPage(viewModel: MainPageViewModel())
+            MainPage(viewModel: AudioListPageViewModel())
 		}
 	}
 }

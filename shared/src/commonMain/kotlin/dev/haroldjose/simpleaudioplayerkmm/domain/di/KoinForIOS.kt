@@ -1,16 +1,21 @@
 package dev.haroldjose.simpleaudioplayerkmm.domain.di
 
+
+
 import dev.haroldjose.simpleaudioplayerkmm.domain.usecase.audio.GetAllAudioUseCase
 import dev.haroldjose.simpleaudioplayerkmm.domain.usecase.audio.GetAudioByIdUseCase
 import dev.haroldjose.simpleaudioplayerkmm.domain.usecase.audio.SetFavoriteAudioUseCase
 import dev.haroldjose.simpleaudioplayerkmm.domain.usecase.audio.UpdateAudioUseCase
-import org.koin.core.module.dsl.factoryOf
-import org.koin.dsl.module
+import org.koin.core.Koin
 
-internal val domainModules = module {
+val Koin.getAllAudioUseCase: GetAllAudioUseCase
+    get() = get()
 
-    factoryOf(::GetAudioByIdUseCase)
-    factoryOf(::GetAllAudioUseCase)
-    factoryOf(::SetFavoriteAudioUseCase)
-    factoryOf(::UpdateAudioUseCase)
-}
+val Koin.getAudioByIdUseCase: GetAudioByIdUseCase
+    get() = get()
+
+val Koin.setFavoriteAudioUseCase: SetFavoriteAudioUseCase
+    get() = get()
+
+val Koin.updateAudioUseCase: UpdateAudioUseCase
+    get() = get()

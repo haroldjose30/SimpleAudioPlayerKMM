@@ -9,7 +9,10 @@
 extension KoinApplication {
     
     private static let keyPaths: [PartialKeyPath<Koin>] = [
-        //\.createFamilyListUseCase,
+        \.getAllAudioUseCase,
+        \.getAudioByIdUseCase,
+        \.setFavoriteAudioUseCase,
+        \.updateAudioUseCase
     ]
     
     static func inject<T>() -> T {

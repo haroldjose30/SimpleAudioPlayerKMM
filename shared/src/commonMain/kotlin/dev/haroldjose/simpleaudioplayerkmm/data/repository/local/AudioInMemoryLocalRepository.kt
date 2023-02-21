@@ -24,17 +24,20 @@ internal class AudioInMemoryLocalRepository(
         return datasource
     }
 
-    override suspend fun setFavorite(
+    override suspend fun getById(
+        uuid: String
+    ): AudioEntryDTO? {
+
+        return datasource.firstOrNull { it.uuid == uuid }
+    }
+
+    override suspend fun updateAudio(
         audio: AudioEntryDTO
     ) {
 
-        //TODO: this can improve performance, using a key
-        datasource.forEach {
-            if (it.title == audio.title) {
-                it.isFavorite = audio.isFavorite
-            } else {
-                it.isFavorite = false
-            }
+        val index = datasource.indexOfFirst { it.uuid == audio.uuid }
+        if (index >= 0) {
+            datasource[index] = audio
         }
     }
 }

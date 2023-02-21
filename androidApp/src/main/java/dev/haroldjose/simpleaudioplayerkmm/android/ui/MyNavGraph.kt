@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import dev.haroldjose.simpleaudioplayerkmm.android.ui.audiodetailpage.AudioDetailPage
 import dev.haroldjose.simpleaudioplayerkmm.android.ui.audiolistpage.AudioListPage
 import dev.haroldjose.simpleaudioplayerkmm.domain.model.AudioEntry
 
@@ -18,12 +19,10 @@ object Destinations {
     const val AUDIO_DETAIL_ROUTE = "audio_detail"
 
     object Arguments {
-        const val AUDIO = "audio"
+        const val UUID = "uuid"
     }
 }
 
-//@SuppressLint("UnrememberedGetBackStackEntry")
-//@InternalCoroutinesApi
 @Composable
 fun MyNavGraph(
     navController: NavHostController = rememberNavController(),
@@ -36,22 +35,40 @@ fun MyNavGraph(
         navController = navController,
         startDestination = startDestination,
     ) {
+
         composable(Destinations.AUDIO_LIST_ROUTE) {
-            AudioListPage()
+            AudioListPage(actions = actions)
         }
 
-        composable(Destinations.AUDIO_DETAIL_ROUTE) {
-            Text("Placeholder for Detail Screen")
-        }
-        /*composable(Destinations.AUDIO_DETAIL_ROUTE,
+        composable(Destinations.AUDIO_DETAIL_ROUTE,
             arguments = listOf(
-                navArgument(Destinations.Arguments.AUDIO) {
+                navArgument(Destinations.Arguments.UUID) {
                     nullable = true
-                    type = NavType.ParcelableType(AudioEntry::class.java)
+                    type = NavType.StringType
                 })) {
-            Text("Placeholder for Detail Screen")
+
+
+            it.arguments?.getString(Destinations.Arguments.UUID)?.let {
+                uuid ->
+                AudioDetailPage(
+                    actions = actions,
+                    uuid = uuid
+                )
+            }
         }
-         */
+
+        composable(
+            "${Destinations.AUDIO_DETAIL_ROUTE}/{${Destinations.Arguments.UUID}}",
+            arguments = listOf(navArgument(Destinations.Arguments.UUID) { type = NavType.StringType })
+        ) {  backStackEntry ->
+                backStackEntry.arguments?.getString(Destinations.Arguments.UUID)?.let {
+
+                    AudioDetailPage(
+                        actions = actions,
+                        uuid = it
+                    )
+                }
+        }
     }
 }
 
@@ -61,11 +78,7 @@ fun MyNavGraph(
 class MainActions(navController: NavHostController) {
 
     val navigateToAudioDetail: (audio: AudioEntry) -> Unit = { audio ->
-        navController.currentBackStackEntry?.savedStateHandle?.apply {
-            set(Destinations.Arguments.AUDIO, audio)
-        }
-        navController.navigate(Destinations.AUDIO_DETAIL_ROUTE)
+        navController.navigate("${Destinations.AUDIO_DETAIL_ROUTE}/${audio.uuid}")
     }
-
 }
 

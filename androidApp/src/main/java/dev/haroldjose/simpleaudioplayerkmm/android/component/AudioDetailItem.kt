@@ -9,9 +9,11 @@ import androidx.compose.material.Slider
 import androidx.compose.material.SliderDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -22,6 +24,7 @@ import com.skydoves.landscapist.ShimmerParams
 import com.skydoves.landscapist.coil.CoilImage
 import dev.haroldjose.simpleaudioplayerkmm.android.R
 import dev.haroldjose.simpleaudioplayerkmm.android.ui.mediaplayer.IMediaPlayerController
+import dev.haroldjose.simpleaudioplayerkmm.android.ui.mediaplayer.MediaPlayerController
 import dev.haroldjose.simpleaudioplayerkmm.android.utils.timeStampToDuration
 import dev.haroldjose.simpleaudioplayerkmm.domain.model.AudioEntry
 
@@ -31,7 +34,7 @@ import dev.haroldjose.simpleaudioplayerkmm.domain.model.AudioEntry
 @Composable
 fun AudioDetailItem(
     audio: AudioEntry,
-    mediaPlayer: IMediaPlayerController,
+    mediaPlayer: MediaPlayerController,
     isAudioPlaying: Boolean,
     isFavorite: Boolean,
     playingTime: Float,
@@ -41,6 +44,10 @@ fun AudioDetailItem(
     onSliderValueChanged: (value: Float) -> Unit,
     onFavoriteClicked: (favorite: Boolean) -> Unit
 ) {
+
+    val playingTimeState = remember {
+        mutableStateOf(playingTime)
+    }
 
     Column(modifier = Modifier.padding(16.dp),
         verticalArrangement = Arrangement.Center,
@@ -86,23 +93,24 @@ fun AudioDetailItem(
         // Time
         Text(modifier = Modifier.wrapContentWidth(),
             textAlign = TextAlign.Center,
-            text = "${playingTime.toInt().timeStampToDuration()} / ${duration.timeStampToDuration()}",
+            text = "${playingTimeState.value.toInt().timeStampToDuration()} / ${duration.timeStampToDuration()}",
             color = MaterialTheme.colors.onSurface)
 
         // Audio Slider
-        Slider(value = playingTime,
+        Slider(value = playingTimeState.value,
             onValueChange = {
+                playingTimeState.value = it
                 onSliderValueChanged(it)
             },
             valueRange = 0f..duration.toFloat(),
             onValueChangeFinished = {
-                mediaPlayer.seekMediaPlayer((playingTime * 1000).toInt())
+                mediaPlayer.seekMediaPlayer((playingTimeState.value * 1000).toInt())
             },
             steps = 1000,
             colors = SliderDefaults.colors(
                 thumbColor = MaterialTheme.colors.secondary,
                 activeTickColor = MaterialTheme.colors.secondary,
-                inactiveTickColor = MaterialTheme.colors.onError,
+                inactiveTickColor = Color.Gray,
             )
         )
 
@@ -119,7 +127,7 @@ fun AudioDetailItem(
     }
 }
 
-
+/*
 @Preview
 @Composable
 fun AudioDetailItemPreview() {
@@ -135,6 +143,7 @@ fun AudioDetailItemPreview() {
 
     return AudioDetailItem(
         audio = AudioEntry(
+            uuid = "uuid1",
             title = "Oceansound",
             audio = "https://nomad5.com/data/skoove/Oceansound.mp3",
             cover = "https://nomad5.com/data/skoove/Oceansound.png",
@@ -151,5 +160,26 @@ fun AudioDetailItemPreview() {
         onFavoriteClicked = {}
     )
 }
+ */
 
+@Preview
+@Composable
+fun AudioDetailItemPreview() {
+
+    Slider(value = 0f,
+        onValueChange = {
+
+        },
+        valueRange = 0f..20f,
+        onValueChangeFinished = {
+
+        },
+        steps = 1000,
+        colors = SliderDefaults.colors(
+            thumbColor = MaterialTheme.colors.secondary,
+            activeTickColor = MaterialTheme.colors.secondary,
+            inactiveTickColor = Color.Gray,
+        )
+    )
+}
 

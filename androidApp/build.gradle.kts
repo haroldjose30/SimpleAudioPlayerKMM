@@ -38,6 +38,8 @@ dependencies {
     val koinAndroidComposeVersion: String by project
     val coil: String by project
     val coilKT: String by project
+    val serializationVersion: String by project
+    val navigationCompose: String by project
 
     implementation(project(":shared"))
     implementation("androidx.compose.ui:ui:1.3.3")
@@ -46,10 +48,15 @@ dependencies {
     implementation("androidx.compose.foundation:foundation:1.3.1")
     implementation("androidx.compose.material:material:1.3.1")
     implementation("androidx.activity:activity-compose:1.6.1")
+    implementation("androidx.navigation:navigation-compose:$navigationCompose")
+
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
     implementation("io.insert-koin:koin-core:$koinVersion")
     implementation("io.insert-koin:koin-android:$koinAndroidVersion")
     implementation("io.insert-koin:koin-androidx-compose:$koinAndroidComposeVersion")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:$serializationVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationVersion")
 
     // Coil
     implementation("com.github.skydoves:landscapist-coil:$coil")
