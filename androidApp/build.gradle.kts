@@ -36,6 +36,8 @@ dependencies {
     val koinVersion: String by project
     val koinAndroidVersion: String by project
     val koinAndroidComposeVersion: String by project
+    val coil: String by project
+    val coilKT: String by project
 
     implementation(project(":shared"))
     implementation("androidx.compose.ui:ui:1.3.3")
@@ -48,4 +50,9 @@ dependencies {
     implementation("io.insert-koin:koin-core:$koinVersion")
     implementation("io.insert-koin:koin-android:$koinAndroidVersion")
     implementation("io.insert-koin:koin-androidx-compose:$koinAndroidComposeVersion")
+
+    // Coil
+    implementation("com.github.skydoves:landscapist-coil:$coil")
+    implementation("io.coil-kt:coil-compose:$coilKT")
+    implementation("io.coil-kt:coil-svg:$coilKT")
 }

@@ -9,14 +9,37 @@
 import SwiftUI
 
 struct MainPage: View {
+    
+    @StateObject var viewModel: MainPageViewModel
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-            .foregroundColor(Color.red)
+        VStack {
+            Text(Localizable.pageTitle)
+                .font(.title)
+            
+            ForEach(viewModel.audioEntryList, id: \.self) { audioEntry in
+                Text(audioEntry)
+                    .padding()
+                    .background(Color.blue)
+            }
+           
+            Spacer()
+            
+        }
     }
+}
+
+
+extension MainPage {
+    private enum Localizable {
+        static let pageTitle = "Skoovin´"
+    }
+    
 }
 
 struct MainPage_Previews: PreviewProvider {
     static var previews: some View {
-        MainPage()
+        
+        MainPage(viewModel: MainPageViewModel())
     }
 }

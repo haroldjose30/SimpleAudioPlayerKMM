@@ -3,10 +3,10 @@ package dev.haroldjose.simpleaudioplayerkmm.data.response
 import kotlinx.serialization.Serializable
 
 /**
- * Audio object
+ * Audio object for Data Layer
  */
 @Serializable
-internal data class AudioEntry(
+data class AudioEntryDTO(
     val title: String,
     val audio: String,
     val cover: String,

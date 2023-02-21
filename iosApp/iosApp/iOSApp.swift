@@ -10,7 +10,8 @@ struct iOSApp: App {
     
 	var body: some Scene {
 		WindowGroup {
-            MainPage()
+            //TODO: Add viewModel on DI
+            MainPage(viewModel: MainPageViewModel())
 		}
 	}
 }
